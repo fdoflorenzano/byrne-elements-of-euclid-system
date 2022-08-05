@@ -1,3 +1,5 @@
+// https://www.c82.net/euclid/book1/#prop14
+
 import React, { useEffect } from "react";
 
 import {
