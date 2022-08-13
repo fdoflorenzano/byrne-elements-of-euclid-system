@@ -86,3 +86,31 @@ export const getLinesBoundingBox = (lines) => {
     height: by1 - by0,
   };
 };
+
+export const randomAngle = (from = -Math.PI, to = Math.PI) =>
+  from + Math.random() * (to - from);
+
+export const randomColor = (except = []) => {
+  const availableColors = colors.filter((c) => !except.includes(c));
+  return availableColors[Math.floor(Math.random() * availableColors.length)];
+};
+
+export const closestRightAngle = (angle) => {
+  const candidates = [0];
+  const comparison = angle > 0 ? (a1, a2) => a1 > a2 : (a1, a2) => a1 < a2;
+  let trial = 0;
+  while (comparison(angle, candidates[candidates.length - 1])) {
+    trial += 1;
+    candidates.push(((trial * Math.PI) / 2) * (angle > 0 ? 1 : -1));
+  }
+  let minDistance = null;
+  let closest = null;
+  for (let candidate of candidates) {
+    const distance = Math.abs(angle - candidate);
+    if (closest == null || distance < minDistance) {
+      minDistance = distance;
+      closest = candidate;
+    }
+  }
+  return closest;
+};

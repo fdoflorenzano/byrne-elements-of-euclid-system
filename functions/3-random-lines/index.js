@@ -107,7 +107,7 @@ export const handler = ({ inputs, mechanic }) => {
               x2={line1.x2}
               y2={line1.y2}
               stroke={backgroundColor}
-              strokeWidth={3}
+              strokeWidth={3 / ratio}
               strokeLinecap="round"
             />
           )}
@@ -117,9 +117,9 @@ export const handler = ({ inputs, mechanic }) => {
             x2={line1.x2}
             y2={line1.y2}
             stroke={line1Color}
-            strokeWidth={3}
+            strokeWidth={3 / ratio}
             strokeLinecap="round"
-            strokeDasharray={line1IsDashed ? 5 : undefined}
+            strokeDasharray={line1IsDashed ? 5 / ratio : undefined}
           />
           {line2IsDashed && (
             <line
@@ -128,7 +128,7 @@ export const handler = ({ inputs, mechanic }) => {
               x2={line2.x2}
               y2={line2.y2}
               stroke={backgroundColor}
-              strokeWidth={3}
+              strokeWidth={3 / ratio}
               strokeLinecap="round"
             />
           )}
@@ -138,9 +138,9 @@ export const handler = ({ inputs, mechanic }) => {
             x2={line2.x2}
             y2={line2.y2}
             stroke={line2Color}
-            strokeWidth={3}
+            strokeWidth={3 / ratio}
             strokeLinecap="round"
-            strokeDasharray={line2IsDashed ? 5 : undefined}
+            strokeDasharray={line2IsDashed ? 5 / ratio : undefined}
           />
         </g>
       </g>
