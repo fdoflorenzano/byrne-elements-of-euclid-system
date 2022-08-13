@@ -25,7 +25,11 @@ export const handler = ({ inputs, mechanic }) => {
       ))}
       {[0, 1, 2, 3].map((v) => (
         <path
-          d={arc(50, (Math.PI / 4) * v, (Math.PI / 4) * v + Math.PI / 4)}
+          d={arc(
+            50,
+            (Math.PI / 4) * v,
+            (Math.PI / 4) * v + (Math.random() * Math.PI) / 2
+          )}
           transform={`translate(${50}, ${(height / 5) * (v + 1)})`}
           fill={colors[v]}
         />

@@ -28,7 +28,7 @@ export const handler = ({ inputs, mechanic }) => {
     y2: height / 2 - (radius / 2) * Math.cos(initialAngle),
   };
   const line1Color = randomColor();
-  const line1IsDashed = Math.random() > 0.5;
+  const line1IsDashed = Math.random() > 0.75;
   const showLine1 = true;
 
   const secondAngleOffset = randomAngle(Math.PI / 8, (3 * Math.PI) / 4);
@@ -40,7 +40,7 @@ export const handler = ({ inputs, mechanic }) => {
     y2: height / 2 - (radius / 2) * Math.cos(secondAngle),
   };
   const line2Color = randomColor([line1Color]);
-  const line2IsDashed = Math.random() > 0.5;
+  const line2IsDashed = Math.random() > 0.75;
   const showLine2 = true;
 
   const thirdAngleOffset = randomAngle(Math.PI / 8, (3 * Math.PI) / 4);
@@ -56,14 +56,20 @@ export const handler = ({ inputs, mechanic }) => {
   };
   let line3Color = randomColor([line1Color, line2Color]);
   line3Color = isThirdAndExtensionOfFirst ? line1Color : line3Color;
-  let line3IsDashed = Math.random() > 0.5;
+  let line3IsDashed = Math.random() > 0.75;
   line3IsDashed = isThirdAndExtensionOfFirst ? line1IsDashed : line3IsDashed;
-  const showLine3 = Math.random() > 0.5;
+  const showLine3 = true;
 
   const forthAngleOffset = randomAngle(Math.PI / 8, (1 * Math.PI) / 4);
   const isForthAndExtensionOfSecond = Math.random() > 0.5;
+  const isForthAndExtensionOfFirst =
+    Math.random() > 0.5 &&
+    !isForthAndExtensionOfSecond &&
+    thirdAngle < initialAngle + (7 * Math.PI) / 8;
   const forthAngle = isForthAndExtensionOfSecond
     ? secondAngle + Math.PI
+    : isForthAndExtensionOfFirst
+    ? initialAngle + Math.PI
     : thirdAngle + forthAngleOffset;
   const line4 = {
     x1: width / 2,
@@ -72,16 +78,24 @@ export const handler = ({ inputs, mechanic }) => {
     y2: height / 2 - (radius / 2) * Math.cos(forthAngle),
   };
   let line4Color = randomColor([line1Color, line2Color, line3Color]);
-  line4Color = isThirdAndExtensionOfFirst ? line2Color : line4Color;
-  let line4IsDashed = Math.random() > 0.5;
-  line4IsDashed = isThirdAndExtensionOfFirst ? line2IsDashed : line4IsDashed;
+  line4Color = isThirdAndExtensionOfFirst
+    ? line2Color
+    : isForthAndExtensionOfFirst
+    ? line1Color
+    : line4Color;
+  let line4IsDashed = Math.random() > 0.75;
+  line4IsDashed = isThirdAndExtensionOfFirst
+    ? line2IsDashed
+    : isForthAndExtensionOfFirst
+    ? line1IsDashed
+    : line4IsDashed;
   const showLine4 = Math.random() > 0.5;
 
   const arc1Color = randomColor([line1Color, line2Color]);
   const showArc1 = true;
-  const arc2Color = randomColor([arc1Color]);
+  const arc2Color = randomColor([arc1Color, line3Color, line2Color]);
   const showArc2 = Math.random() > 0.5;
-  const arc3Color = randomColor([arc1Color, arc2Color]);
+  const arc3Color = randomColor([arc1Color, arc2Color, line4Color]);
   const showArc3 = Math.random() > 0.5;
   const arc4Color = randomColor([arc1Color, arc2Color, arc3Color]);
   const showArc4 = Math.random() > 0.5;
