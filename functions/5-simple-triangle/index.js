@@ -2,10 +2,14 @@ import React, { useEffect } from "react";
 
 import {
   backgroundColor,
+  linesIntersect,
   randomAngle,
-  randomColor,
-  closestRightAngle,
+  getLinesBoundingBox,
+  lineLength,
+  rotate,
 } from "../utils.js";
+
+import { getRandomDiagram } from "../diagrams.js";
 import { Arc, Line } from "../Shapes.js";
 
 export const handler = ({ inputs, mechanic }) => {
@@ -13,191 +17,137 @@ export const handler = ({ inputs, mechanic }) => {
 
   const width = realWidth - 2 * margin;
   const height = realHeight - 2 * margin;
-  const radius = Math.min(width, height);
+  const diameter = Math.min(width, height);
+
+  const baseLength = Math.random() * diameter;
+  const point1 = { x: 0, y: 0 };
+  const point2 = { x: baseLength, y: 0 };
+
+  let angle1 = randomAngle(Math.PI / 10, Math.PI / 2);
+  let angle2 = randomAngle(Math.PI / 10, Math.PI / 2);
+  let angle3 = Math.PI - angle1 - angle2;
+
+  const projectedPoint1 = {
+    x: baseLength,
+    y: point1.y - baseLength * Math.tan(angle1),
+  };
+  const projectedPoint2 = {
+    x: point1.x,
+    y: point2.y - baseLength * Math.tan(angle2),
+  };
+  const point3 = linesIntersect(
+    {
+      x1: point1.x,
+      y1: point1.y,
+      x2: projectedPoint1.x,
+      y2: projectedPoint1.y,
+    },
+    {
+      x1: point2.x,
+      y1: point2.y,
+      x2: projectedPoint2.x,
+      y2: projectedPoint2.y,
+    }
+  );
+
+  const adjustAngle = 0;
+
+  rotate(point1, adjustAngle);
+  rotate(point2, adjustAngle);
+  rotate(point3, adjustAngle);
+
+  const line1 = {
+    x1: point3.x,
+    y1: point3.y,
+    x2: point2.x,
+    y2: point2.y,
+  };
+  const line2 = {
+    x1: point1.x,
+    y1: point1.y,
+    x2: point3.x,
+    y2: point3.y,
+  };
+  const line3 = {
+    x1: point1.x,
+    y1: point1.y,
+    x2: point2.x,
+    y2: point2.y,
+  };
+
+  const length1 = lineLength(line1);
+  const length2 = lineLength(line2);
+  const length3 = lineLength(line3);
+
+  const boundingBox = getLinesBoundingBox([line1, line2, line3]);
+  const ratio = Math.min(
+    width / boundingBox.width,
+    height / boundingBox.height
+  );
 
   useEffect(() => {
     mechanic.done();
   }, []);
 
-  const initialAngle = randomAngle();
-  const roundedInitialAngle = closestRightAngle(initialAngle);
-  const line1 = {
-    x1: width / 2,
-    y1: height / 2,
-    x2: width / 2 + (radius / 2) * Math.sin(initialAngle),
-    y2: height / 2 - (radius / 2) * Math.cos(initialAngle),
-  };
-  const line1Color = randomColor();
-  const line1IsDashed = Math.random() > 0.75;
-  const showLine1 = true;
-
-  const secondAngleOffset = randomAngle(Math.PI / 8, (3 * Math.PI) / 4);
-  const secondAngle = initialAngle + secondAngleOffset;
-  const line2 = {
-    x1: width / 2,
-    y1: height / 2,
-    x2: width / 2 + (radius / 2) * Math.sin(secondAngle),
-    y2: height / 2 - (radius / 2) * Math.cos(secondAngle),
-  };
-  const line2Color = randomColor([line1Color]);
-  const line2IsDashed = Math.random() > 0.75;
-  const showLine2 = true;
-
-  const thirdAngleOffset = randomAngle(Math.PI / 8, (3 * Math.PI) / 4);
-  const isThirdAndExtensionOfFirst = Math.random() > 0.5;
-  const thirdAngle = isThirdAndExtensionOfFirst
-    ? initialAngle + Math.PI
-    : secondAngle + thirdAngleOffset;
-  const line3 = {
-    x1: width / 2,
-    y1: height / 2,
-    x2: width / 2 + (radius / 2) * Math.sin(thirdAngle),
-    y2: height / 2 - (radius / 2) * Math.cos(thirdAngle),
-  };
-  let line3Color = randomColor([line1Color, line2Color]);
-  line3Color = isThirdAndExtensionOfFirst ? line1Color : line3Color;
-  let line3IsDashed = Math.random() > 0.75;
-  line3IsDashed = isThirdAndExtensionOfFirst ? line1IsDashed : line3IsDashed;
-  const showLine3 = true;
-
-  const forthAngleOffset = randomAngle(Math.PI / 8, (1 * Math.PI) / 4);
-  const isForthAndExtensionOfSecond = Math.random() > 0.5;
-  const isForthAndExtensionOfFirst =
-    Math.random() > 0.5 &&
-    !isForthAndExtensionOfSecond &&
-    thirdAngle < initialAngle + (7 * Math.PI) / 8;
-  const forthAngle = isForthAndExtensionOfSecond
-    ? secondAngle + Math.PI
-    : isForthAndExtensionOfFirst
-    ? initialAngle + Math.PI
-    : thirdAngle + forthAngleOffset;
-  const line4 = {
-    x1: width / 2,
-    y1: height / 2,
-    x2: width / 2 + (radius / 2) * Math.sin(forthAngle),
-    y2: height / 2 - (radius / 2) * Math.cos(forthAngle),
-  };
-  let line4Color = randomColor([line1Color, line2Color, line3Color]);
-  line4Color = isThirdAndExtensionOfFirst
-    ? line2Color
-    : isForthAndExtensionOfFirst
-    ? line1Color
-    : line4Color;
-  let line4IsDashed = Math.random() > 0.75;
-  line4IsDashed = isThirdAndExtensionOfFirst
-    ? line2IsDashed
-    : isForthAndExtensionOfFirst
-    ? line1IsDashed
-    : line4IsDashed;
-  const showLine4 = Math.random() > 0.5;
-
-  const arc1Color = randomColor([line1Color, line2Color]);
-  const showArc1 = true;
-  const arc1InnerRadius = Math.random() > 0.5 ? 0 : radius / 10;
-  const arc2Color = randomColor([arc1Color, line3Color, line2Color]);
-  const showArc2 = Math.random() > 0.5;
-  const arc2InnerRadius = Math.random() > 0.5 ? 0 : radius / 10;
-  const arc3Color = randomColor([arc1Color, arc2Color, line4Color]);
-  const showArc3 = Math.random() > 0.5;
-  const arc3InnerRadius = Math.random() > 0.5 ? 0 : radius / 10;
-  const arc4Color = randomColor([arc1Color, arc2Color, arc3Color]);
-  const showArc4 = Math.random() > 0.5;
-  const arc4InnerRadius = Math.random() > 0.5 ? 0 : radius / 10;
-
   return (
     <svg width={realWidth} height={realHeight}>
       <rect width={realWidth} height={realHeight} fill={backgroundColor} />
-      <g transform={`translate(${margin}, ${margin})`}>
-        <g
-          transform={`translate(${width / 2} ${height / 2}) rotate(${
-            ((roundedInitialAngle - initialAngle) * 180) / Math.PI
-          }) translate(${-width / 2} ${-height / 2})`}
-        >
-          {showLine1 && showLine2 && showArc1 && (
-            <Arc
-              radius={radius / 5}
-              innerRadius={arc1InnerRadius}
-              startAngle={initialAngle}
-              endAngle={secondAngle}
-              cx={width / 2}
-              cy={height / 2}
-              fill={arc1Color}
-            />
-          )}
-          {showLine2 && showLine3 && showArc2 && (
-            <Arc
-              radius={radius / 5}
-              innerRadius={arc2InnerRadius}
-              startAngle={secondAngle}
-              endAngle={thirdAngle}
-              cx={width / 2}
-              cy={height / 2}
-              fill={arc2Color}
-            />
-          )}
-          {showLine3 && showLine4 && showArc3 && (
-            <Arc
-              radius={radius / 5}
-              innerRadius={arc3InnerRadius}
-              startAngle={thirdAngle}
-              endAngle={forthAngle}
-              cx={width / 2}
-              cy={height / 2}
-              fill={arc3Color}
-            />
-          )}
-          {showLine4 && showLine1 && showArc4 && (
-            <Arc
-              radius={radius / 5}
-              innerRadius={arc4InnerRadius}
-              startAngle={forthAngle}
-              endAngle={2 * Math.PI + initialAngle}
-              cx={width / 2}
-              cy={height / 2}
-              fill={arc4Color}
-            />
-          )}
 
-          {showLine1 && (
-            <Line
-              x1={line1.x1}
-              y1={line1.y1}
-              x2={line1.x2}
-              y2={line1.y2}
-              stroke={line1Color}
-              dashed={line1IsDashed}
-            />
-          )}
-          {showLine2 && (
-            <Line
-              x1={line2.x1}
-              y1={line2.y1}
-              x2={line2.x2}
-              y2={line2.y2}
-              stroke={line2Color}
-              dashed={line2IsDashed}
-            />
-          )}
-          {showLine3 && (
-            <Line
-              x1={line3.x1}
-              y1={line3.y1}
-              x2={line3.x2}
-              y2={line3.y2}
-              stroke={line3Color}
-              dashed={line3IsDashed}
-            />
-          )}
-          {showLine4 && (
-            <Line
-              x1={line4.x1}
-              y1={line4.y1}
-              x2={line4.x2}
-              y2={line4.y2}
-              stroke={line4Color}
-              dashed={line4IsDashed}
-            />
-          )}
+      <g
+        transform={`translate(${
+          margin + (width - boundingBox.width * ratio) / 2
+        }, ${margin + (height - boundingBox.height * ratio) / 2})`}
+      >
+        <g
+          transform={`scale(${ratio}) translate(${-boundingBox.x0}, ${-boundingBox.y0})`}
+        >
+          <Line
+            x1={point1.x}
+            y1={point1.y}
+            x2={point2.x}
+            y2={point2.y}
+            stroke="black"
+            strokeWidth={3 / ratio}
+          />
+          <Line
+            x1={point3.x}
+            y1={point3.y}
+            x2={point2.x}
+            y2={point2.y}
+            stroke="black"
+            strokeWidth={3 / ratio}
+          />
+          <Line
+            x1={point1.x}
+            y1={point1.y}
+            x2={point3.x}
+            y2={point3.y}
+            stroke="black"
+            strokeWidth={3 / ratio}
+          />
+
+          <Arc
+            radius={50 / ratio}
+            innerRadius={20 / ratio}
+            startAngle={Math.PI / 2 - angle1 - adjustAngle}
+            endAngle={Math.PI / 2 - adjustAngle}
+          />
+          <Arc
+            radius={50 / ratio}
+            innerRadius={20 / ratio}
+            startAngle={-Math.PI / 2 - adjustAngle}
+            endAngle={-Math.PI / 2 + angle2 - adjustAngle}
+            cx={point2.x}
+            cy={point2.y}
+          />
+          <Arc
+            radius={50 / ratio}
+            innerRadius={20 / ratio}
+            startAngle={Math.PI / 2 + angle2 - adjustAngle}
+            endAngle={-Math.PI / 2 - angle1 + 2 * Math.PI - adjustAngle}
+            cx={point3.x}
+            cy={point3.y}
+          />
         </g>
       </g>
     </svg>

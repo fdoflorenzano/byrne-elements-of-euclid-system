@@ -130,3 +130,15 @@ export const getGridDimensions = (width, height, size, gap) => {
   }
   return [columns, rows, length(columns), length(rows)];
 };
+
+export const lineLength = ({ x1, x2, y1, y2 }) => Math.hypot(x1 - x2, y1 - y2);
+
+export const rotate = (point, angle) => {
+  const radians = angle,
+    cos = Math.cos(radians),
+    sin = Math.sin(radians),
+    nx = cos * point.x + sin * point.y,
+    ny = cos * point.y - sin * point.x;
+  point.x = nx;
+  point.y = ny;
+};
