@@ -6,9 +6,9 @@ export const backgroundColor = "#fcf3d9";
 
 const arcGen = arcD3();
 
-export const arc = (radius, startAngle, endAngle) =>
+export const arc = (radius, startAngle, endAngle, innerRadius = 0) =>
   arcGen({
-    innerRadius: 0,
+    innerRadius,
     outerRadius: radius,
     startAngle,
     endAngle,

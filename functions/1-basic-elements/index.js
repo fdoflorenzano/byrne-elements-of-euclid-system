@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 
 import { colors, backgroundColor } from "../utils.js";
+import { Line, Arc } from "../Shapes.js";
 
 export const handler = ({ inputs, mechanic }) => {
   const { width, height } = inputs;
@@ -9,57 +10,40 @@ export const handler = ({ inputs, mechanic }) => {
     mechanic.done();
   }, []);
 
-  // generate random points? lines? shapes?
-  // determine all lines involved
-  // check for intersections and divide lines up
-  // randomize styling for each line: stroke color, stroke dasharray
-  //
-
   return (
     <svg width={width} height={height}>
       <rect width={width} height={height} fill={backgroundColor} />
       {[0, 1, 2, 3].map((v) => (
-        <line
+        <Line
           x1={25 * (v + 1)}
           y1={10}
           x2={25 * (v + 1)}
           y2={height - 10}
           stroke={colors[v]}
-          strokeWidth={3}
-          strokeLinecap="round"
+          dashed={false}
         />
       ))}
 
       {[0, 1, 2, 3].map((v) => (
         <>
-          <line
-            x1={100 + 25 * (v + 1)}
-            y1={10}
-            x2={100 + 25 * (v + 1)}
-            y2={height - 10}
-            stroke={backgroundColor}
-            strokeWidth={3}
-            strokeLinecap="round"
-          />
-          <line
+          <Line
             x1={100 + 25 * (v + 1)}
             y1={10}
             x2={100 + 25 * (v + 1)}
             y2={height - 10}
             stroke={colors[v]}
-            strokeWidth={3}
-            strokeDasharray={5}
+            dashed
           />
         </>
       ))}
 
-      {/* https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths#arcs */}
       {[0, 1, 2, 3].map((v) => (
-        <path
-          d={`M ${250} ${(height / 5) * (v + 1)}
-            L${250} ${(height / 5) * (v + 1) + 50}
-            A ${50} ${50} 0 0 0 ${300} ${(height / 5) * (v + 1)} 
-            Z`}
+        <Arc
+          cx={250}
+          cy={(height / 5) * (v + 1)}
+          startAngle={Math.PI / 2}
+          endAngle={Math.PI}
+          radius={50}
           fill={colors[v]}
         />
       ))}

@@ -3,12 +3,12 @@ import React, { useEffect } from "react";
 import {
   colors,
   backgroundColor,
-  arc,
   linesIntersect,
   getLineAngle,
   getLineLength,
   getLinesBoundingBox,
 } from "../utils.js";
+import { Arc, Line } from "../Shapes.js";
 
 export const handler = ({ inputs, mechanic }) => {
   const { width, height, margin } = inputs;
@@ -94,53 +94,33 @@ export const handler = ({ inputs, mechanic }) => {
           transform={`scale(${ratio}) translate(${-boundingBox.x0}, ${-boundingBox.y0})`}
         >
           {intersection && (
-            <path
-              d={arc(Math.min(50, length1, length2), angle1, angle2)}
-              transform={`translate(${intersection.x}, ${intersection.y})`}
+            <Arc
+              cx={intersection.x}
+              cy={intersection.y}
+              radius={Math.min(50, length1, length2)}
+              startAngle={angle1}
+              endAngle={angle2}
               fill={arcColor}
             />
           )}
-          {line1IsDashed && (
-            <line
-              x1={line1.x1}
-              y1={line1.y1}
-              x2={line1.x2}
-              y2={line1.y2}
-              stroke={backgroundColor}
-              strokeWidth={3 / ratio}
-              strokeLinecap="round"
-            />
-          )}
-          <line
+
+          <Line
             x1={line1.x1}
             y1={line1.y1}
             x2={line1.x2}
             y2={line1.y2}
             stroke={line1Color}
+            dashed={line1IsDashed}
             strokeWidth={3 / ratio}
-            strokeLinecap="round"
-            strokeDasharray={line1IsDashed ? 5 / ratio : undefined}
           />
-          {line2IsDashed && (
-            <line
-              x1={line2.x1}
-              y1={line2.y1}
-              x2={line2.x2}
-              y2={line2.y2}
-              stroke={backgroundColor}
-              strokeWidth={3 / ratio}
-              strokeLinecap="round"
-            />
-          )}
-          <line
+          <Line
             x1={line2.x1}
             y1={line2.y1}
             x2={line2.x2}
             y2={line2.y2}
             stroke={line2Color}
+            dashed={line2IsDashed}
             strokeWidth={3 / ratio}
-            strokeLinecap="round"
-            strokeDasharray={line2IsDashed ? 5 / ratio : undefined}
           />
         </g>
       </g>

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 
-import { colors, backgroundColor, arc } from "../utils.js";
+import { colors, backgroundColor } from "../utils.js";
+import { Arc } from "../Shapes.js";
 
 export const handler = ({ inputs, mechanic }) => {
   const { width, height } = inputs;
@@ -13,24 +14,24 @@ export const handler = ({ inputs, mechanic }) => {
     <svg width={width} height={height}>
       <rect width={width} height={height} fill={backgroundColor} />
 
-      {/* https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths#arcs */}
       {[0, 1, 2, 3].map((v) => (
-        <path
-          d={`M ${250} ${(height / 5) * (v + 1)}
-            L${250} ${(height / 5) * (v + 1) + 50}
-            A ${50} ${50} 0 0 0 ${300} ${(height / 5) * (v + 1)} 
-            Z`}
+        <Arc
+          startAngle={(Math.PI / 4) * v}
+          endAngle={(Math.PI / 4) * v + (Math.random() * Math.PI) / 2}
+          radius={50}
+          innerRadius={25}
+          cx={250}
+          cy={(height / 5) * (v + 1)}
           fill={colors[v]}
         />
       ))}
       {[0, 1, 2, 3].map((v) => (
-        <path
-          d={arc(
-            50,
-            (Math.PI / 4) * v,
-            (Math.PI / 4) * v + (Math.random() * Math.PI) / 2
-          )}
-          transform={`translate(${50}, ${(height / 5) * (v + 1)})`}
+        <Arc
+          startAngle={(Math.PI / 4) * v}
+          endAngle={(Math.PI / 4) * v + (Math.random() * Math.PI) / 2}
+          radius={50}
+          cx={50}
+          cy={(height / 5) * (v + 1)}
           fill={colors[v]}
         />
       ))}
