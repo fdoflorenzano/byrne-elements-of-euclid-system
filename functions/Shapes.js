@@ -7,8 +7,8 @@ export const Arc = ({
   startAngle,
   endAngle,
   innerRadius,
-  cx,
-  cy,
+  cx = 0,
+  cy = 0,
   fill,
 }) => (
   <path

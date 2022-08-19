@@ -114,3 +114,19 @@ export const closestRightAngle = (angle) => {
   }
   return closest;
 };
+
+export const getGridDimensions = (width, height, size, gap) => {
+  let rows = 0;
+  let columns = 0;
+
+  const length = (reps) =>
+    reps > 1 ? reps * size + (reps - 1) * gap : reps * size;
+
+  while (length(rows + 1) <= height) {
+    rows += 1;
+  }
+  while (length(columns + 1) <= width) {
+    columns += 1;
+  }
+  return [columns, rows, length(columns), length(rows)];
+};
