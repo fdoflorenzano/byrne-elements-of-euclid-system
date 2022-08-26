@@ -5,17 +5,30 @@ import { backgroundColor, getGridDimensions } from "../utils.js";
 import { getRandomDiagram } from "../diagrams.js";
 
 export const handler = ({ inputs, mechanic }) => {
-  const { width: realWidth, height: realHeight, margin, size, gap } = inputs;
+  const {
+    width: realWidth,
+    height: realHeight,
+    verticalMargin: verticalMarginRatio,
+    horizontalMargin: horizontalMarginRatio,
+    size,
+    verticalGap: verticalGapRatio,
+    horizontalGap: horizontalGapRatio,
+  } = inputs;
 
-  const width = realWidth - 2 * margin;
-  const height = realHeight - 2 * margin;
+  const horizontalMargin = (realWidth * horizontalMarginRatio) / 2;
+  const verticalMargin = (realHeight * verticalMarginRatio) / 2;
+  const width = realWidth - 2 * horizontalMargin;
+  const height = realHeight - 2 * verticalMargin;
   const diameter = Math.min(width, height) * size;
+  const verticalGap = diameter * verticalGapRatio;
+  const horizontalGap = diameter * horizontalGapRatio;
 
   const [columns, rows, xLength, yLength] = getGridDimensions(
     width,
     height,
     diameter,
-    gap
+    horizontalGap,
+    verticalGap
   );
 
   const diagrams = [];
@@ -24,9 +37,10 @@ export const handler = ({ inputs, mechanic }) => {
     for (let column = 0; column < columns; column++) {
       diagrams.push(
         <g
-          transform={`translate(${diameter / 2 + column * (diameter + gap)}, ${
-            diameter / 2 + row * (diameter + gap)
-          })`}
+          key={`${row}-${column}`}
+          transform={`translate(${
+            diameter / 2 + column * (diameter + horizontalGap)
+          }, ${diameter / 2 + row * (diameter + verticalGap)})`}
         >
           {getRandomDiagram(diameter)}
         </g>
@@ -42,8 +56,8 @@ export const handler = ({ inputs, mechanic }) => {
     <svg width={realWidth} height={realHeight}>
       <rect width={realWidth} height={realHeight} fill={backgroundColor} />
       <g
-        transform={`translate(${margin + (width - xLength) / 2}, ${
-          margin + (height - yLength) / 2
+        transform={`translate(${horizontalMargin + (width - xLength) / 2}, ${
+          verticalMargin + (height - yLength) / 2
         })`}
       >
         {diagrams}
@@ -61,10 +75,6 @@ export const inputs = {
     type: "number",
     default: 3200,
   },
-  margin: {
-    type: "number",
-    default: 50,
-  },
   size: {
     type: "number",
     default: 0.26,
@@ -73,9 +83,37 @@ export const inputs = {
     step: 0.01,
     slider: true,
   },
-  gap: {
+  verticalMargin: {
     type: "number",
-    default: 10,
+    default: 0.2,
+    min: 0,
+    max: 1,
+    step: 0.01,
+    slider: true,
+  },
+  horizontalMargin: {
+    type: "number",
+    default: 0.2,
+    min: 0,
+    max: 1,
+    step: 0.01,
+    slider: true,
+  },
+  verticalGap: {
+    type: "number",
+    default: 0.2,
+    min: 0,
+    max: 4,
+    step: 0.01,
+    slider: true,
+  },
+  horizontalGap: {
+    type: "number",
+    default: 0.2,
+    min: 0,
+    max: 4,
+    step: 0.01,
+    slider: true,
   },
 };
 

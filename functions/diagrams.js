@@ -4,7 +4,7 @@ import { randomAngle, randomColor, closestRightAngle } from "./utils.js";
 import { Arc, Line } from "./Shapes.js";
 
 export const getRandomDiagram = (size) => {
-  const strokeWidth = Math.max(Math.floor(size / 60), 3);
+  const strokeWidth = Math.floor(size / 40);
 
   const initialAngle = randomAngle();
   const roundedInitialAngle = closestRightAngle(initialAngle);

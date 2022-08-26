@@ -115,20 +115,33 @@ export const closestRightAngle = (angle) => {
   return closest;
 };
 
-export const getGridDimensions = (width, height, size, gap) => {
+export const getGridDimensions = (
+  width,
+  height,
+  size,
+  horizontalGap,
+  verticalGap
+) => {
   let rows = 0;
   let columns = 0;
 
-  const length = (reps) =>
+  if (size <= height && 2 * size + verticalGap > height) rows = 1;
+  else if (2 * size + verticalGap <= height)
+    rows = 1 + Math.floor((height - size) / (size + verticalGap));
+
+  if (size <= width && 2 * size + horizontalGap > width) columns = 1;
+  else if (2 * size + horizontalGap <= width)
+    columns = 1 + Math.floor((width - size) / (size + horizontalGap));
+
+  const length = (reps, gap) =>
     reps > 1 ? reps * size + (reps - 1) * gap : reps * size;
 
-  while (length(rows + 1) <= height) {
-    rows += 1;
-  }
-  while (length(columns + 1) <= width) {
-    columns += 1;
-  }
-  return [columns, rows, length(columns), length(rows)];
+  return [
+    columns,
+    rows,
+    length(columns, horizontalGap),
+    length(rows, verticalGap),
+  ];
 };
 
 export const lineLength = ({ x1, x2, y1, y2 }) => Math.hypot(x1 - x2, y1 - y2);
