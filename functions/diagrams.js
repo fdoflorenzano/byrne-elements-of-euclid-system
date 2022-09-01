@@ -1,6 +1,11 @@
 import React from "react";
 
-import { randomAngle, randomColor, closestRightAngle } from "./utils.js";
+import {
+  randomAngle,
+  randomColor,
+  closestRightAngle,
+  tossCoin,
+} from "./utils.js";
 import { Arc, Line } from "./Shapes.js";
 
 export const getRandomDiagram = (size) => {
@@ -15,7 +20,7 @@ export const getRandomDiagram = (size) => {
     y2: -(size / 2) * Math.cos(initialAngle),
   };
   const line1Color = randomColor();
-  const line1IsDashed = Math.random() > 0.75;
+  const line1IsDashed = tossCoin(0.75);
   const showLine1 = true;
 
   const secondAngleOffset = randomAngle(Math.PI / 8, (3 * Math.PI) / 4);
@@ -27,11 +32,11 @@ export const getRandomDiagram = (size) => {
     y2: -(size / 2) * Math.cos(secondAngle),
   };
   const line2Color = randomColor([line1Color]);
-  const line2IsDashed = Math.random() > 0.75;
+  const line2IsDashed = tossCoin(0.75);
   const showLine2 = true;
 
   const thirdAngleOffset = randomAngle(Math.PI / 8, (3 * Math.PI) / 4);
-  const isThirdAndExtensionOfFirst = Math.random() > 0.5;
+  const isThirdAndExtensionOfFirst = tossCoin();
   const thirdAngle = isThirdAndExtensionOfFirst
     ? initialAngle + Math.PI
     : secondAngle + thirdAngleOffset;
@@ -43,14 +48,14 @@ export const getRandomDiagram = (size) => {
   };
   let line3Color = randomColor([line1Color, line2Color]);
   line3Color = isThirdAndExtensionOfFirst ? line1Color : line3Color;
-  let line3IsDashed = Math.random() > 0.75;
+  let line3IsDashed = tossCoin(0.75);
   line3IsDashed = isThirdAndExtensionOfFirst ? line1IsDashed : line3IsDashed;
   const showLine3 = true;
 
   const forthAngleOffset = randomAngle(Math.PI / 8, (1 * Math.PI) / 4);
-  const isForthAndExtensionOfSecond = Math.random() > 0.5;
+  const isForthAndExtensionOfSecond = tossCoin();
   const isForthAndExtensionOfFirst =
-    Math.random() > 0.5 &&
+    tossCoin() &&
     !isForthAndExtensionOfSecond &&
     thirdAngle < initialAngle + (7 * Math.PI) / 8;
   const forthAngle = isForthAndExtensionOfSecond
@@ -70,26 +75,26 @@ export const getRandomDiagram = (size) => {
     : isForthAndExtensionOfFirst
     ? line1Color
     : line4Color;
-  let line4IsDashed = Math.random() > 0.75;
+  let line4IsDashed = tossCoin(0.75);
   line4IsDashed = isThirdAndExtensionOfFirst
     ? line2IsDashed
     : isForthAndExtensionOfFirst
     ? line1IsDashed
     : line4IsDashed;
-  const showLine4 = Math.random() > 0.5;
+  const showLine4 = tossCoin();
 
   const arc1Color = randomColor([line1Color, line2Color]);
   const showArc1 = true;
-  const arc1InnerRadius = Math.random() > 0.5 ? 0 : size / 10;
+  const arc1InnerRadius = tossCoin() ? 0 : size / 10;
   const arc2Color = randomColor([arc1Color, line3Color, line2Color]);
-  const showArc2 = Math.random() > 0.5;
-  const arc2InnerRadius = Math.random() > 0.5 ? 0 : size / 10;
+  const showArc2 = tossCoin();
+  const arc2InnerRadius = tossCoin() ? 0 : size / 10;
   const arc3Color = randomColor([arc1Color, arc2Color, line4Color]);
-  const showArc3 = Math.random() > 0.5;
-  const arc3InnerRadius = Math.random() > 0.5 ? 0 : size / 10;
+  const showArc3 = tossCoin();
+  const arc3InnerRadius = tossCoin() ? 0 : size / 10;
   const arc4Color = randomColor([arc1Color, arc2Color, arc3Color]);
-  const showArc4 = Math.random() > 0.5;
-  const arc4InnerRadius = Math.random() > 0.5 ? 0 : size / 10;
+  const showArc4 = tossCoin();
+  const arc4InnerRadius = tossCoin() ? 0 : size / 10;
 
   return (
     <g

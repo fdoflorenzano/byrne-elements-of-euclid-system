@@ -1,6 +1,5 @@
 import { arc as arcD3 } from "d3-shape";
 
-// https://www.c82.net/euclid/book1/
 export const colors = ["#000000", "#d42a20", "#fac22b", "#0e638e"];
 export const backgroundColor = "#fcf3d9";
 
@@ -95,6 +94,8 @@ export const randomColor = (except = []) => {
   return availableColors[Math.floor(Math.random() * availableColors.length)];
 };
 
+export const tossCoin = (load = 0.5) => Math.random() > load;
+
 export const closestRightAngle = (angle) => {
   const candidates = [0];
   const comparison = angle > 0 ? (a1, a2) => a1 > a2 : (a1, a2) => a1 < a2;
@@ -124,6 +125,8 @@ export const getGridDimensions = (
 ) => {
   let rows = 0;
   let columns = 0;
+
+  if (size <= 0) return [0, 0, 0, 0];
 
   if (size <= height && 2 * size + verticalGap > height) rows = 1;
   else if (2 * size + verticalGap <= height)
