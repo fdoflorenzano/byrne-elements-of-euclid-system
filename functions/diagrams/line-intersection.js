@@ -5,8 +5,8 @@ import {
   randomColor,
   closestRightAngle,
   tossCoin,
-} from "./utils.js";
-import { Arc, Line } from "./Shapes.js";
+} from "../utils.js";
+import { Arc, Line } from "../Shapes.js";
 
 export const getRandomDiagram = (size) => {
   const strokeWidth = Math.floor(size / 40);

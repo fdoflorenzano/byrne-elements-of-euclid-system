@@ -11,7 +11,6 @@ import {
   tossCoin,
 } from "../utils.js";
 
-import { getRandomDiagram } from "../diagrams.js";
 import { Arc, Line } from "../Shapes.js";
 
 export const handler = ({ inputs, mechanic }) => {

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 import { backgroundColor, getGridDimensions } from "../utils.js";
 
-import { getRandomDiagram } from "../diagrams.js";
+import { getRandomDiagram } from "../diagrams/line-intersection.js";
 
 export const handler = ({ inputs, mechanic }) => {
   const {
