@@ -10,11 +10,17 @@ export const Arc = ({
   cx = 0,
   cy = 0,
   fill,
+  stroke,
+  dashed,
+  strokeWidth = 3,
 }) => (
   <path
     d={arc(radius, startAngle, endAngle, innerRadius)}
     transform={`translate(${cx}, ${cy})`}
     fill={fill}
+    stroke={stroke && fill}
+    strokeWidth={stroke && 3}
+    strokeDasharray={stroke && dashed && `${strokeWidth}`}
   />
 );
 
