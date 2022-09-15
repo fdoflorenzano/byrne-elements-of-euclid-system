@@ -89,9 +89,12 @@ export const getLinesBoundingBox = (lines) => {
 export const randomAngle = (from = -Math.PI, to = Math.PI) =>
   from + Math.random() * (to - from);
 
+export const randomChoice = (choices) =>
+  choices[Math.floor(Math.random() * choices.length)];
+
 export const randomColor = (except = []) => {
   const availableColors = colors.filter((c) => !except.includes(c));
-  return availableColors[Math.floor(Math.random() * availableColors.length)];
+  return randomChoice(availableColors);
 };
 
 export const tossCoin = (load = 0.5) => Math.random() > load;
@@ -150,11 +153,17 @@ export const getGridDimensions = (
 export const lineLength = ({ x1, x2, y1, y2 }) => Math.hypot(x1 - x2, y1 - y2);
 
 export const rotate = (point, angle) => {
-  const radians = angle,
-    cos = Math.cos(radians),
-    sin = Math.sin(radians),
-    nx = cos * point.x + sin * point.y,
-    ny = cos * point.y - sin * point.x;
-  point.x = nx;
-  point.y = ny;
+  // const radians = angle,
+  //   cos = Math.cos(radians),
+  //   sin = Math.sin(radians),
+  //   nx = cos * point.x + sin * point.y,
+  //   ny = cos * point.y - sin * point.x;
+  // point.x = nx;
+  // point.y = ny;
+
+  const distance = Math.hypot(point.x, -point.y);
+  const baseAngle = Math.atan2(point.x, -point.y);
+  const finalAngle = baseAngle + angle;
+  point.x = distance * Math.sin(finalAngle);
+  point.y = -distance * Math.cos(finalAngle);
 };

@@ -2,6 +2,14 @@ import React from "react";
 
 import { backgroundColor, arc } from "./utils.js";
 
+const getSinglePathArc = (radius, startAngle, endAngle) => {
+  return `M ${radius * Math.sin(startAngle)} ${
+    -radius * Math.cos(startAngle)
+  } A ${radius} ${radius} ${0} ${
+    endAngle - startAngle <= Math.PI ? 0 : 1
+  } ${1} ${radius * Math.sin(endAngle)} ${-radius * Math.cos(endAngle)}`;
+};
+
 export const Arc = ({
   radius,
   startAngle,
@@ -10,14 +18,19 @@ export const Arc = ({
   cx = 0,
   cy = 0,
   fill,
+  filled,
   stroke,
   dashed,
   strokeWidth = 3,
 }) => (
   <path
-    d={arc(radius, startAngle, endAngle, innerRadius)}
+    d={
+      radius === innerRadius
+        ? getSinglePathArc(radius, startAngle, endAngle)
+        : arc(radius, startAngle, endAngle, innerRadius)
+    }
     transform={`translate(${cx}, ${cy})`}
-    fill={fill}
+    fill={radius !== innerRadius || filled ? fill : "none"}
     stroke={stroke && fill}
     strokeWidth={stroke && 3}
     strokeDasharray={stroke && dashed && `${strokeWidth}`}

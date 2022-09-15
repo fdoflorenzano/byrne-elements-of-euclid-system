@@ -116,8 +116,8 @@ export const getRandomTriangle = (size) => {
           <Arc
             radius={arc1Radius}
             innerRadius={arc1InnerRadius}
-            startAngle={Math.PI / 2 - angle1 - adjustAngle}
-            endAngle={Math.PI / 2 - adjustAngle}
+            startAngle={Math.PI / 2 - angle1 + adjustAngle}
+            endAngle={Math.PI / 2 + adjustAngle}
             cx={point1.x}
             cy={point1.y}
             fill={arc1Color}
@@ -127,8 +127,8 @@ export const getRandomTriangle = (size) => {
           <Arc
             radius={arc2Radius}
             innerRadius={arc2InnerRadius}
-            startAngle={-Math.PI / 2 - adjustAngle}
-            endAngle={-Math.PI / 2 + angle2 - adjustAngle}
+            startAngle={-Math.PI / 2 + adjustAngle}
+            endAngle={-Math.PI / 2 + angle2 + adjustAngle}
             cx={point2.x}
             cy={point2.y}
             fill={arc2Color}
@@ -138,8 +138,8 @@ export const getRandomTriangle = (size) => {
           <Arc
             radius={arc3Radius}
             innerRadius={arc3InnerRadius}
-            startAngle={Math.PI / 2 + angle2 - adjustAngle}
-            endAngle={-Math.PI / 2 - angle1 + 2 * Math.PI - adjustAngle}
+            startAngle={Math.PI / 2 + angle2 + adjustAngle}
+            endAngle={-Math.PI / 2 - angle1 + 2 * Math.PI + adjustAngle}
             cx={point3.x}
             cy={point3.y}
             fill={arc3Color}
